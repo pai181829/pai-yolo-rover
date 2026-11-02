@@ -1,0 +1,8 @@
+build/
+install/
+log/
+__pycache__/
+*.pyc
+*.avi
+*.mp4
+yolov8n.pt

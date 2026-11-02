@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="patrol_room">
+    <physics type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>250</real_time_update_rate>
+    </physics>
+    <scene>
+      <ambient>0.6 0.6 0.6 1</ambient>
+      <background>0.75 0.85 0.95 1</background>
+      <shadows>false</shadows>
+    </scene>
+    <gui>
+      <camera name="user_camera">
+        <pose>-6.5 -6.5 6.5 0 0.62 0.785</pose>
+      </camera>
+    </gui>
+
+    <include><uri>model://ground_plane</uri></include>
+    <include><uri>model://sun</uri></include>
+
+    <!-- 9 m x 9 m room -->
+    <model name="walls">
+      <static>true</static>
+      <link name="link">
+        <collision name="n"><pose>0 4.5 0.4 0 0 0</pose><geometry><box><size>9.2 0.2 0.8</size></box></geometry></collision>
+        <visual name="n"><pose>0 4.5 0.4 0 0 0</pose><geometry><box><size>9.2 0.2 0.8</size></box></geometry>
+          <material><ambient>0.85 0.85 0.8 1</ambient><diffuse>0.85 0.85 0.8 1</diffuse></material></visual>
+        <collision name="s"><pose>0 -4.5 0.4 0 0 0</pose><geometry><box><size>9.2 0.2 0.8</size></box></geometry></collision>
+        <visual name="s"><pose>0 -4.5 0.4 0 0 0</pose><geometry><box><size>9.2 0.2 0.8</size></box></geometry>
+          <material><ambient>0.85 0.85 0.8 1</ambient><diffuse>0.85 0.85 0.8 1</diffuse></material></visual>
+        <collision name="e"><pose>4.5 0 0.4 0 0 0</pose><geometry><box><size>0.2 9.2 0.8</size></box></geometry></collision>
+        <visual name="e"><pose>4.5 0 0.4 0 0 0</pose><geometry><box><size>0.2 9.2 0.8</size></box></geometry>
+          <material><ambient>0.85 0.85 0.8 1</ambient><diffuse>0.85 0.85 0.8 1</diffuse></material></visual>
+        <collision name="w"><pose>-4.5 0 0.4 0 0 0</pose><geometry><box><size>0.2 9.2 0.8</size></box></geometry></collision>
+        <visual name="w"><pose>-4.5 0 0.4 0 0 0</pose><geometry><box><size>0.2 9.2 0.8</size></box></geometry>
+          <material><ambient>0.85 0.85 0.8 1</ambient><diffuse>0.85 0.85 0.8 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- target objects (COCO classes recognised by YOLO) -->
+    <include>
+      <name>stop_sign</name>
+      <uri>model://stop_sign</uri>
+      <pose>3.4 1.6 -1.05 0 0 -1.5708</pose>
+    </include>
+    <include>
+      <name>person</name>
+      <uri>model://person_standing</uri>
+      <static>true</static>
+      <pose>-1.2 3.4 0 0 0 0</pose>
+    </include>
+    <include>
+      <name>fire_hydrant</name>
+      <uri>model://fire_hydrant</uri>
+      <pose>1.8 -3.2 0 0 0 0</pose>
+    </include>
+
+    <!-- distractor boxes (not COCO targets) -->
+    <model name="box_a">
+      <static>true</static>
+      <pose>-2.8 -1.8 0.25 0 0 0.4</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.5 0.5 0.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.5 0.5 0.5</size></box></geometry>
+          <material><ambient>0.2 0.5 0.8 1</ambient><diffuse>0.2 0.5 0.8 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="box_b">
+      <static>true</static>
+      <pose>-3.0 0.9 0.2 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><cylinder><radius>0.2</radius><length>0.4</length></cylinder></geometry></collision>
+        <visual name="v"><geometry><cylinder><radius>0.2</radius><length>0.4</length></cylinder></geometry>
+          <material><ambient>0.3 0.7 0.3 1</ambient><diffuse>0.3 0.7 0.3 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- fixed bird's-eye camera used only for the demo video (/overhead/image_raw) -->
+    <model name="overhead_camera">
+      <static>true</static>
+      <pose>-5.6 -5.6 6.2 0 0.70 0.785</pose>
+      <link name="link">
+        <sensor type="camera" name="overhead">
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+          <camera>
+            <horizontal_fov>1.25</horizontal_fov>
+            <image><width>640</width><height>480</height><format>R8G8B8</format></image>
+            <clip><near>0.1</near><far>60</far></clip>
+          </camera>
+          <plugin name="overhead_plugin" filename="libgazebo_ros_camera.so">
+            <camera_name>overhead</camera_name>
+            <frame_name>overhead_link</frame_name>
+          </plugin>
+        </sensor>
+      </link>
+    </model>
+  </world>
+</sdf>
